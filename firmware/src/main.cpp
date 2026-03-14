@@ -1,7 +1,9 @@
 #include <Arduino.h>
 #include "config.h"
+#include "i2c_bus.h"
 #include "camera.h"
 #include "imu.h"
+#include "battery.h"
 #include "wifi_server.h"
 
 // ── LED helpers ───────────────────────────────────────────────────────────────
@@ -49,6 +51,9 @@ void setup() {
     pinMode(BUTTON_PIN, INPUT_PULLUP);
     ledOff();
 
+    // Shared I2C bus (Wire1, GPIO 4/13) — BNO055 + IP5306 both live here
+    secondaryBusInit();
+
     if (!cameraInit()) {
         Serial.println("[FATAL] Camera init failed — halting");
         // Rapid blink to indicate fatal error
@@ -58,6 +63,10 @@ void setup() {
     if (!imuInit()) {
         Serial.println("[WARN] IMU not available — headings will be invalid");
         ledBlink(3, 200);   // triple-blink: IMU warning
+    }
+
+    if (!batteryInit()) {
+        Serial.println("[WARN] IP5306 PMU not found — battery % unavailable");
     }
 
     wifiServerBegin();

@@ -1,6 +1,7 @@
 #include "wifi_server.h"
 #include "camera.h"
 #include "imu.h"
+#include "battery.h"
 #include "config.h"
 #include <WiFi.h>
 #include <WebServer.h>
@@ -57,6 +58,18 @@ static void handleStatus() {
     server.send(200, "application/json", body);
 }
 
+static void handleBattery() {
+    setCORSHeaders();
+    BatteryStatus b = batteryRead();
+    JsonDocument doc;
+    doc["percent"]  = b.percent;
+    doc["charging"] = b.charging;
+    doc["valid"]    = b.valid;
+    String body;
+    serializeJson(doc, body);
+    server.send(200, "application/json", body);
+}
+
 static void handleNotFound() {
     server.send(404, "text/plain", "Not found");
 }
@@ -71,6 +84,7 @@ void wifiServerBegin() {
 
     server.on("/snapshot", HTTP_GET, handleSnapshot);
     server.on("/imu",      HTTP_GET, handleImu);
+    server.on("/battery",  HTTP_GET, handleBattery);
     server.on("/status",   HTTP_GET, handleStatus);
     server.onNotFound(handleNotFound);
     server.begin();

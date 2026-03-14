@@ -2,6 +2,7 @@ package com.solarresourcemap
 
 import android.Manifest
 import android.content.pm.PackageManager
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -10,6 +11,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.lifecycleScope
 import com.solarresourcemap.databinding.ActivityMainBinding
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
 import kotlinx.coroutines.launch
 import java.util.Calendar
 
@@ -43,6 +46,7 @@ class MainActivity : AppCompatActivity() {
         binding.btnCapture.setOnClickListener { onCaptureClicked() }
 
         checkPermissions()
+        startBatteryPolling()
     }
 
     // ── Permission handling ───────────────────────────────────────────────────
@@ -60,6 +64,40 @@ class MainActivity : AppCompatActivity() {
 
     private fun onPermissionsGranted() {
         binding.btnCapture.isEnabled = true
+    }
+
+    // ── Battery polling ───────────────────────────────────────────────────────
+
+    private fun startBatteryPolling() {
+        lifecycleScope.launch {
+            while (isActive) {
+                val result = client.fetchBattery()
+                result.onSuccess { batt -> updateBatteryUi(batt) }
+                // Poll every 30 seconds; don't show errors — camera may not be connected yet
+                delay(30_000L)
+            }
+        }
+    }
+
+    private fun updateBatteryUi(batt: BatteryStatus) {
+        if (!batt.valid) {
+            binding.batteryText.text = "Battery: unavailable"
+            binding.batteryText.setTextColor(Color.parseColor("#AAAAAA"))
+            return
+        }
+        val chargingLabel = if (batt.charging) " ⚡" else ""
+        binding.batteryText.text = "Battery: ${batt.percent}%$chargingLabel"
+        binding.batteryText.setTextColor(
+            when {
+                batt.charging      -> Color.parseColor("#4CAF50")  // green while charging
+                batt.percent <= 25 -> Color.parseColor("#F44336")  // red — low
+                batt.percent <= 50 -> Color.parseColor("#FF9800")  // orange — moderate
+                else               -> Color.parseColor("#4CAF50")  // green — good
+            }
+        )
+        if (batt.percent <= 25 && !batt.charging) {
+            Toast.makeText(this, "Camera battery low (${batt.percent}%)", Toast.LENGTH_LONG).show()
+        }
     }
 
     // ── Capture flow ──────────────────────────────────────────────────────────

@@ -9,6 +9,9 @@ Items to address when hardware is in hand and development resumes.
 - [ ] Implement BNO055 calibration offset storage to flash so the sensor
       does not require re-calibration on every boot
       (`Adafruit_BNO055::getSensorOffsets` / `setSensorOffsets`)
+- [ ] Verify IP5306 register addresses (0x78 battery LEDs, 0x20 charging flag)
+      against actual hardware — IP5306 datasheet register map should be
+      confirmed with oscilloscope or logic analyser on first bring-up
 - [ ] Expose a `/calibration` endpoint to return current BNO055 calibration
       status (sys/gyro/accel/mag) so the Android app can warn the user
       when calibration is poor

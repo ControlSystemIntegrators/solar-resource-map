@@ -6,6 +6,7 @@
  * Endpoints:
  *   GET /snapshot  – captures and returns a fresh JPEG (image/jpeg)
  *   GET /imu       – returns BNO055 Euler angles as JSON
+ *   GET /battery   – returns IP5306 battery % and charging state as JSON
  *   GET /status    – returns device status JSON
  *
  * Primary capture flow: Android app calls GET /snapshot.

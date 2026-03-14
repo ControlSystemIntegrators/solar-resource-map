@@ -1,18 +1,16 @@
 #include "imu.h"
+#include "i2c_bus.h"
 #include "config.h"
-#include <Wire.h>
 #include <Adafruit_Sensor.h>
 #include <Adafruit_BNO055.h>
 #include <Arduino.h>
 
-// Use the ESP32 second I2C bus (Wire1) to avoid conflict with camera I2C
-static TwoWire        imuWire = TwoWire(1);
-static Adafruit_BNO055 bno(55, BNO055_ADDR, &imuWire);
-static bool           initialised = false;
+// BNO055 on the shared secondary I2C bus (GPIO 4/13)
+static Adafruit_BNO055 bno(55, BNO055_ADDR, &secondaryBus);
+static bool            initialised = false;
 
 bool imuInit() {
-    imuWire.begin(IMU_SDA_PIN, IMU_SCL_PIN);
-
+    // secondaryBus is initialised by secondaryBusInit() in main setup()
     if (!bno.begin()) {
         Serial.println("[IMU] BNO055 not found — check wiring & address");
         return false;

@@ -44,6 +44,15 @@ class CameraClient(baseUrl: String = "http://192.168.4.1") {
         }
     }
 
+    /** Fetch battery status from the camera's IP5306 PMU. */
+    suspend fun fetchBattery(): Result<BatteryStatus> = withContext(Dispatchers.IO) {
+        runCatching {
+            val response = http.newCall(Request.Builder().url("$base/battery").build()).execute()
+            check(response.isSuccessful) { "Battery HTTP ${response.code}" }
+            gson.fromJson(response.body!!.string(), BatteryStatus::class.java)
+        }
+    }
+
     /**
      * Fetch snapshot and IMU data together.
      * Returns a pair only if both succeed.
