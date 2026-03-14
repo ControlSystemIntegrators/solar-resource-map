@@ -1,0 +1,25 @@
+# Firmware (PlatformIO)
+firmware/.pio/
+firmware/.vscode/
+firmware/lib/
+firmware/.clang_complete
+firmware/.gcc-flags.json
+
+# Android
+android/.gradle/
+android/local.properties
+android/app/build/
+android/build/
+android/*.iml
+android/**/*.iml
+android/.idea/
+android/captures/
+android/.externalNativeBuild/
+android/.cxx/
+*.keystore
+*.jks
+
+# General
+.DS_Store
+Thumbs.db
+*.log
