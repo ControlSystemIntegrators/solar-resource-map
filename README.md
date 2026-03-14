@@ -9,17 +9,24 @@ camera orientation.
 
 | Component | Part |
 |-----------|------|
-| Camera | M5Stack Timer Camera (OV3660 fisheye, ESP32) |
-| IMU | Bosch BNO055 (9-DOF, onboard sensor fusion) |
-| Trigger | Built-in button (GPIO 37) |
+| Camera | M5Stack Timer Camera F (U082-F — OV3660 fisheye, ESP32) |
+| IMU | Adafruit BNO055 breakout (RB-Ada-215) |
+| Trigger | Android app (primary) · onboard button (status ping only) |
 
 ## How It Works
 
-1. Mount the camera pointing straight up (fisheye lens facing the sky).
-2. Connect your Android phone to the **SolarMapper** WiFi network.
-3. Press the button on the camera (or tap **Capture** in the app).
-4. The app fetches the JPEG image and IMU heading/tilt from the camera, reads
-   GPS from the phone, and renders three sun-path arcs on the fisheye image.
+The camera mounts on a pole or selfie stick pointed straight up at the sky.
+The operator controls everything from the Android phone on the ground.
+
+1. Power on the camera — the LED comes on steady when ready.
+2. Connect your Android phone to the **SolarMapper** WiFi AP.
+3. Tap **Capture + Overlay** in the app.
+4. The app calls `/snapshot` on the camera (fresh capture), reads IMU heading
+   and tilt from `/imu`, takes a GPS fix from the phone, then renders three
+   sun-path arcs on the fisheye image.
+
+> **Physical button (GPIO 37):** double-blinks the LED as a "device alive"
+> confirmation. It does not trigger a capture — use the app for that.
 
 ### Overlay Legend
 
@@ -80,8 +87,8 @@ Edit `firmware/src/config.h` before flashing:
 ```c
 #define AP_SSID     "SolarMapper"
 #define AP_PASSWORD "your-secure-password"
-#define IMU_SDA_PIN  13
-#define IMU_SCL_PIN  14
+#define IMU_SDA_PIN  4    // Grove SDA on Timer Camera F
+#define IMU_SCL_PIN  13   // Grove SCL on Timer Camera F
 ```
 
 See `docs/wiring/bno055.md` for sensor wiring details.

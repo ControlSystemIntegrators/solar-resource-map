@@ -61,7 +61,7 @@ static void handleNotFound() {
     server.send(404, "text/plain", "Not found");
 }
 
-// ── Public entry point ────────────────────────────────────────────────────────
+// ── Public entry points ───────────────────────────────────────────────────────
 
 void wifiServerBegin() {
     WiFi.softAP(AP_SSID, AP_PASSWORD, AP_CHANNEL, AP_HIDDEN);
@@ -75,4 +75,8 @@ void wifiServerBegin() {
     server.onNotFound(handleNotFound);
     server.begin();
     Serial.printf("[HTTP] Server on port %d\n", HTTP_PORT);
+}
+
+void wifiServerHandleClient() {
+    server.handleClient();
 }

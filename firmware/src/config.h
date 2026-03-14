@@ -37,7 +37,11 @@
 #define BNO055_ADDR  0x28    // ADR pin → GND; use 0x29 if ADR → 3V3
 
 // ── Button ────────────────────────────────────────────────────────────────────
+// Secondary input only — primary capture is triggered by the Android app.
 #define BUTTON_PIN  37      // Timer Camera F side button (active LOW)
+
+// ── Status LED ────────────────────────────────────────────────────────────────
+#define LED_PIN     2       // Timer Camera F onboard LED (active HIGH)
 #define BUTTON_ACTIVE_LOW true
 
 // ── Image ─────────────────────────────────────────────────────────────────────

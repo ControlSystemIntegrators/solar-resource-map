@@ -12,8 +12,8 @@ Items to address when hardware is in hand and development resumes.
 - [ ] Expose a `/calibration` endpoint to return current BNO055 calibration
       status (sys/gyro/accel/mag) so the Android app can warn the user
       when calibration is poor
-- [ ] Refactor `main.cpp` — expose `server.handleClient()` cleanly rather
-      than using `extern WebServer`
+- [x] Refactor `main.cpp` — expose `wifiServerHandleClient()` cleanly;
+      removed `extern WebServer` hack
 - [ ] Test OV3660 fisheye vflip/hmirror settings with physical hardware;
       adjust `camera.cpp` if image is mirrored or inverted
 
