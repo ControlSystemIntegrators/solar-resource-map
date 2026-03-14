@@ -22,8 +22,8 @@ Items to address when hardware is in hand and development resumes.
 
 ## Android App
 
-- [ ] Add `gradle/libs.versions.toml` version catalog (Android Studio will
-      flag missing dependency declarations when the project is first opened)
+- [x] Add `gradle/libs.versions.toml` version catalog and
+      `gradle/wrapper/gradle-wrapper.properties` (AGP 8.7.3 / Gradle 8.11.1)
 - [ ] Apply magnetic declination correction to heading so the overlay aligns
       to true North rather than magnetic North
       (NOAA WMM or World Magnetic Model API)
