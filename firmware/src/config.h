@@ -9,7 +9,7 @@
 // ── HTTP Server ───────────────────────────────────────────────────────────────
 #define HTTP_PORT   80
 
-// ── Camera pins (M5Stack Timer Camera) ───────────────────────────────────────
+// ── Camera pins (M5Stack Timer Camera F — U082-F) ────────────────────────────
 #define CAM_PIN_PWDN    -1
 #define CAM_PIN_RESET   15
 #define CAM_PIN_XCLK     27
@@ -28,13 +28,16 @@
 #define CAM_PIN_PCLK    21
 
 // ── IMU (BNO055) I2C ─────────────────────────────────────────────────────────
-// Uses the ESP32's second I2C bus so it doesn't conflict with camera I2C
-#define IMU_SDA_PIN  13
-#define IMU_SCL_PIN  14
-#define BNO055_ADDR  0x28   // ALT: 0x29 if ADR pin is HIGH
+// Adafruit BNO055 breakout (RB-Ada-215) wired to the Timer Camera F Grove port.
+// Grove provides 5 V power; the Adafruit breakout accepts 3.3–5 V on VIN.
+// The Grove I2C pins are on Wire1 (secondary bus) — no conflict with the
+// camera's internal I2C bus (Wire0, GPIO 25/23).
+#define IMU_SDA_PIN  4       // Grove SDA on Timer Camera F
+#define IMU_SCL_PIN  13      // Grove SCL on Timer Camera F
+#define BNO055_ADDR  0x28    // ADR pin → GND; use 0x29 if ADR → 3V3
 
 // ── Button ────────────────────────────────────────────────────────────────────
-#define BUTTON_PIN  37      // M5Stack Timer Camera built-in button
+#define BUTTON_PIN  37      // Timer Camera F side button (active LOW)
 #define BUTTON_ACTIVE_LOW true
 
 // ── Image ─────────────────────────────────────────────────────────────────────

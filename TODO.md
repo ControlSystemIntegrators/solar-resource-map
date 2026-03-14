@@ -4,8 +4,8 @@ Items to address when hardware is in hand and development resumes.
 
 ## Firmware
 
-- [ ] Verify GPIO pin assignments against the specific Timer Camera board
-      revision received (camera, button, and I2C pins may vary)
+- [ ] Confirm GPIO 4 / GPIO 13 Grove I2C pin assignment against Timer Camera F
+      schematic when hardware arrives (see `docs/wiring/bno055.md`)
 - [ ] Implement BNO055 calibration offset storage to flash so the sensor
       does not require re-calibration on every boot
       (`Adafruit_BNO055::getSensorOffsets` / `setSensorOffsets`)
